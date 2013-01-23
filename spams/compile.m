@@ -140,7 +140,7 @@ COMPILE = {
             %'-I./linalg/ linalg/mex/mexNormalize.cpp',  
             % compile decomp toolbox
             '-I./linalg/ -I./decomp/ decomp/mex/mexLasso.cpp',
-            %'-I./linalg/ -I./decomp/ decomp/mex/mexOMP.cpp',
+            '-I./linalg/ -I./decomp/ decomp/mex/mexOMP.cpp',
             %'-I./linalg/ -I./decomp/ decomp/mex/mexCD.cpp'
             %'-I./linalg/ -I./decomp/ decomp/mex/mexL1L2BCD.cpp', 
             %'-I./linalg/ -I./decomp/ decomp/mex/mexLassoMask.cpp',

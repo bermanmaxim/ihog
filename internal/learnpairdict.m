@@ -82,7 +82,7 @@ function dict = lasso(data, k, iters, lambda),
 
 param.K = k;
 param.lambda = lambda;
-param.mode = 2;
+param.mode = 5;
 param.modeD = 0;
 param.iter = 100;
 param.numThreads = 12;
