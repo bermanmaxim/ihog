@@ -243,7 +243,7 @@ void mexFunction(int nlhs, mxArray *plhs[], int nrhs, const mxArray *prhs[]) {
   if (nlhs != 1)
     mexErrMsgTxt("Wrong number of outputs");
 
-  int normalize = 1;
+  int normalize = 0;
   double truncator = 0.2;
 
   if (nrhs >= 3) {
