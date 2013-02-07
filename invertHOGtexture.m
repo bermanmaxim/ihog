@@ -67,15 +67,10 @@ for i=1:size(feat,1) - pd.ny + 1,
   end
 end
 
-dhog = pd.dhog;
-dhog = reshape(pd.dhog, [pd.ny pd.nx features pd.k]);
-dhog = dhog(:, :, end-4:end-1, :);
-dhog = reshape(dhog, [pd.ny*pd.nx*4 pd.k]);
-
 % solve lasso problem
 param.lambda = pd.lambda;
 param.mode = 2;
-a = full(mexLasso(single(windows), dhog, param));
+a = full(mexLasso(single(windows), pd.dhog, param));
 recon = pd.dgray * a;
 
 % reconstruct

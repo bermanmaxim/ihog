@@ -128,8 +128,8 @@ ny = dim(1);
 nx = dim(2);
 
 fprintf('ihog: allocating data store: %.02fGB\n', ...
-        ((ny+2)*(nx+2)*sbin^2+ny*nx*features)*n*4/1024/1024/1024);
-data = zeros((ny+2)*(nx+2)*sbin^2+ny*nx*features, n, 'single');
+        ((ny+2)*(nx+2)*sbin^2+ny*nx*4)*n*4/1024/1024/1024);
+data = zeros((ny+2)*(nx+2)*sbin^2+ny*nx*4, n, 'single');
 c = 1;
 
 fprintf('ihog: loading data: ');
@@ -140,6 +140,7 @@ while true,
     im = double(imread(stream{k})) / 255.;
     im = mean(im,3);
     feat = features(repmat(im, [1 1 3]), sbin);
+    feat = feat(:, :, end-4:end-1);
 
     for i=1:size(feat,1) - dim(1),
       for j=1:size(feat,2) - dim(2),

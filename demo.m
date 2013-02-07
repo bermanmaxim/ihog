@@ -1,6 +1,6 @@
 im = double(imread('2007_000272.jpg')) / 255.;
 feat = features(im, 8);
-ihog = invertHOG(feat);
+ihog = invertHOGtexture(feat);
 
 figure(1);
 clf;
