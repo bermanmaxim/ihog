@@ -1,4 +1,4 @@
-function texturereport(im, pdnormal, pdtexture),
+function texturereport(im, output, pdnormal, pdtexture),
 
 feat = features(im2double(im), 8);
 
@@ -17,4 +17,4 @@ ihogtexture = padarray(ihogtexture, [0 10], 1, 'post');
 
 graphic = cat(2, ihogtexture, ihognormal, im);
 
-imagesc(graphic);
+imwrite(graphic, output);
