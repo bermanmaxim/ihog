@@ -35,8 +35,11 @@ if ~exist('pd', 'var'),
   pd = ihog_pd;
 end
 
+
+textavg = feat(:, :, end-4:end-1);
+textavg = mean(textavg(:));
 par = 5;
-feat = padarray(feat, [par par 0], 0);
+feat = padarray(feat, [par par 0], textavg);
 
 [ny, nx, ~] = size(feat);
 
