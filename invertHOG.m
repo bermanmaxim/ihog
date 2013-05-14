@@ -98,4 +98,4 @@ im = im(1:(ny+2)*pd.sbin/pd.scale, 1:(nx+2)*pd.sbin/pd.scale);
 im(:) = im(:) - min(im(:));
 im(:) = im(:) / max(im(:));
 
-im = im(par*pd.sbin:end-par*pd.sbin, par*pd.sbin:end-par*pd.sbin, :);
+im = im(par*pd.sbin/pd.scale:end-par*pd.sbin/pd.scale, par*pd.sbin/pd.scale:end-par*pd.sbin/pd.scale, :);
