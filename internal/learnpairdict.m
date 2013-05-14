@@ -131,7 +131,7 @@ function [data, images] = getdata(stream, n, dim, scale, sbin),
 ny = dim(1);
 nx = dim(2);
 
-pointsize = (ny+2)*(nx+2)*sbin^2/(scale^2) + ny*nx*features;
+pointsize = (ny+2)*(nx+2)*sbin^2/(scale^2) + ny*nx*featuresdim();
 
 fprintf('ihog: allocating data store: %.02fGB\n', ...
         pointsize*n*4/1024/1024/1024);
