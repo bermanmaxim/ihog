@@ -73,17 +73,17 @@ a = full(mexLasso(single(windows), pd.dhog, param));
 recon = pd.dgray * a;
 
 % reconstruct
-im      = zeros((size(feat,1)+2)*pd.sbin, (size(feat,2)+2)*pd.sbin);
-weights = zeros((size(feat,1)+2)*pd.sbin, (size(feat,2)+2)*pd.sbin);
+im      = zeros((size(feat,1)+2)*pd.sbin/pd.scale, (size(feat,2)+2)*pd.sbin/pd.scale);
+weights = zeros((size(feat,1)+2)*pd.sbin/pd.scale, (size(feat,2)+2)*pd.sbin/pd.scale);
 c = 1;
 for i=1:size(feat,1) - pd.ny + 1,
   for j=1:size(feat,2) - pd.nx + 1,
-    fil = fspecial('gaussian', [(pd.ny+2)*pd.sbin (pd.nx+2)*pd.sbin], 9);
-    patch = reshape(recon(:, c), [(pd.ny+2)*pd.sbin (pd.nx+2)*pd.sbin]);
+    fil = fspecial('gaussian', [(pd.ny+2)*pd.sbin/pd.scale (pd.nx+2)*pd.sbin/pd.scale], 9);
+    patch = reshape(recon(:, c), [(pd.ny+2)*pd.sbin/pd.scale (pd.nx+2)*pd.sbin/pd.scale]);
     patch = patch .* fil;
 
-    iii = (i-1)*pd.sbin+1:(i-1)*pd.sbin+(pd.ny+2)*pd.sbin;
-    jjj = (j-1)*pd.sbin+1:(j-1)*pd.sbin+(pd.nx+2)*pd.sbin;
+    iii = (i-1)*pd.sbin/pd.scale+1:(i-1)*pd.sbin/pd.scale+(pd.ny+2)*pd.sbin/pd.scale;
+    jjj = (j-1)*pd.sbin/pd.scale+1:(j-1)*pd.sbin/pd.scale+(pd.nx+2)*pd.sbin/pd.scale;
 
     im(iii, jjj) = im(iii, jjj) + patch;
     weights(iii, jjj) = weights(iii, jjj) + 1;
@@ -94,7 +94,7 @@ end
 
 % post processing averaging and clipping
 im = im ./ weights;
-im = im(1:(ny+2)*pd.sbin, 1:(nx+2)*pd.sbin);
+im = im(1:(ny+2)*pd.sbin/pd.scale, 1:(nx+2)*pd.sbin/pd.scale);
 im(:) = im(:) - min(im(:));
 im(:) = im(:) / max(im(:));
 

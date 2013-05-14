@@ -17,19 +17,22 @@
 %   dgray     A dictionary of gray elements
 %   dhog      A dictionary of HOG elements
 
-function pd = learnpairdict(stream, n, k, ny, nx, lambda, iters, sbin, fast),
+function pd = learnpairdict(stream, n, k, ny, nx, scale, lambda, iters, sbin, fast),
 
 if ~exist('n', 'var'),
-   n = 100000;
+   n = 10000;
 end
 if ~exist('k', 'var'),
-  k = 1000;
+  k = 1024;
 end
 if ~exist('ny', 'var'),
   ny = 5;
 end
 if ~exist('nx', 'var'),
   nx = 5;
+end
+if ~exist('scale', 'var'),
+  scale = .5; % 0.02 is best so far
 end
 if ~exist('lambda', 'var'),
   lambda = 0.02; % 0.02 is best so far
@@ -44,12 +47,12 @@ if ~exist('fast', 'var'),
   fast = false;
 end
 
-graysize = (ny+2)*(nx+2)*sbin^2;
+graysize = (ny+2)*(nx+2)*sbin^2 / (scale^2);
 
 t = tic;
 
 stream = resolvestream(stream);
-[data, trainims] = getdata(stream, n, [ny nx], sbin);
+[data, trainims] = getdata(stream, n, [ny nx], scale, sbin);
 
 fprintf('ihog: normalize\n');
 for i=1:size(data,2),
@@ -72,6 +75,7 @@ pd.k = k;
 pd.ny = ny;
 pd.nx = nx;
 pd.sbin = sbin;
+pd.scale = scale;
 pd.iters = iters;
 pd.lambda = lambda;
 pd.trainims = trainims;
@@ -122,14 +126,16 @@ dict = data(:, order);
 % getdata(stream, n, dim, sbin)
 %
 % Reads in the stream and extracts windows along with their HOG features.
-function [data, images] = getdata(stream, n, dim, sbin),
+function [data, images] = getdata(stream, n, dim, scale, sbin),
 
 ny = dim(1);
 nx = dim(2);
 
+pointsize = (ny+2)*(nx+2)*sbin^2/(scale^2) + ny*nx*features;
+
 fprintf('ihog: allocating data store: %.02fGB\n', ...
-        ((ny+2)*(nx+2)*sbin^2+ny*nx*features)*n*4/1024/1024/1024);
-data = zeros((ny+2)*(nx+2)*sbin^2+ny*nx*features, n, 'single');
+        pointsize*n*4/1024/1024/1024);
+data = zeros(pointsize, n, 'single');
 c = 1;
 
 fprintf('ihog: loading data: ');
@@ -139,7 +145,11 @@ while true,
 
     im = double(imread(stream{k})) / 255.;
     im = mean(im,3);
-    feat = features(repmat(im, [1 1 3]), sbin);
+
+    rim = imresize(im, scale);
+    rim(rim > 1) = 1;
+    rim(rim < 0) = 0;
+    feat = features(repmat(rim, [1 1 3]), sbin);
 
     for i=1:size(feat,1) - dim(1),
       for j=1:size(feat,2) - dim(2),
@@ -149,8 +159,8 @@ while true,
 
         featpoint = feat(i:i+ny-1, ...
                          j:j+ny-1, :);
-        graypoint = im((i-1)*sbin+1:(i+1+ny)*sbin, ...
-                       (j-1)*sbin+1:(j+1+nx)*sbin);
+        graypoint = im((i-1)*sbin/scale+1:(i+1+ny)*sbin/scale, ...
+                       (j-1)*sbin/scale+1:(j+1+nx)*sbin/scale);
         data(:, c) = single([graypoint(:); featpoint(:)]);
 
         c = c + 1;

@@ -14,9 +14,10 @@ end
 hny = pd.ny;
 hnx = pd.nx;
 sbin = pd.sbin;
+scale = pd.scale;
 
-gny = (hny+2)*sbin;
-gnx = (hnx+2)*sbin;
+gny = (hny+2)*sbin/scale;
+gnx = (hnx+2)*sbin/scale;
 
 bord = 10;
 cy = (gny+bord);
