@@ -35,6 +35,10 @@ if ~exist('pd', 'var'),
   pd = ihog_pd;
 end
 
+if ~isfield(pd, 'scale'),
+  pd.scale = 1;
+end
+
 par = 5;
 feat = padarray(feat, [par par 0], 0);
 
@@ -100,6 +104,6 @@ im(:) = im(:) / max(im(:));
 
 im = im(par*pd.sbin/pd.scale:end-par*pd.sbin/pd.scale, par*pd.sbin/pd.scale:end-par*pd.sbin/pd.scale, :);
 
-im = imresize(im, pd.scale);
-im(im > 1) = 1;
-im(im < 0) = 0;
+%im = imresize(im, pd.scale);
+%im(im > 1) = 1;
+%im(im < 0) = 0;
