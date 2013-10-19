@@ -225,6 +225,11 @@ mxArray *process(const mxArray *mximage, const mxArray *mxsbin, int normalize, d
     }
   }
 
+  for (int x = 0; x < out[0]*out[1]*out[2]; x++) {
+    feat[x] = feat[x] - 0.1335;
+    feat[x] = feat[x] / 0.1897;
+  }
+
   mxFree(hist);
   mxFree(norm);
   return mxfeat;
